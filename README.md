@@ -1,5 +1,6 @@
 # e-Receipt
-e-Receipt is a classified e-receipt, of which the items and prices can be accessed with a secret key. The data have been encrypted with the Advanced Encryption Standard.
+e-Receipt is a classified e-receipt, of which the items and prices can be accessed with a secret key. The data have been encrypted with the Advanced Encryption Standard implemented in JavaScript--crypto.js.
+
 ## How to edit
 Given you have a new item and its price to be included in the [e-Receipt](https://kietpawpan.github.io/money/), you can do as follows:
 1. Open the index.html file.
