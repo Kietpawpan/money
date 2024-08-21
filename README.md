@@ -2,7 +2,7 @@
 ## How to edit
 Given you have a new item and its price to be included in the e-Receipt, you can program as follows:
 1. Open the index.html file.
-2. Copy this code and paste it beneath the last item element:
+2. Copy and paste this code beneath the last item.:
 ```
 <div class="transactionDetails">
 <div class="detail" id="an"></div>
