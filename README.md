@@ -34,12 +34,14 @@ U2FsdGVkX18lLSq1grR569u8l621WOmlAZgCpp8TDUJDQhdvIkTuVCHtTrTDqtrMg4Z80yooZNw9V01A
 14. Replace the old cipher text with the new one.
 
 ## Coding Note
-A decrypted text can be set as a variable value by using eval().
+1. A decrypted text can be set as a variable value by using eval().
 ```
 var x = eval(decrypted.toString(CryptoJS.enc.Utf8));
 ```
-2. I used Javascript to display the HTML elements' values (onload), using the for-loop.
-3. The data were stored in variable x as the two dimensional array:
+2. A for loop was used for displaying the HTML elements' values (onload).
+```
+```
+4. The data were stored in variable x as the two dimensional array:
 ```
 var x = [['item 1', price 1], ['item 2', price 2], ..., ['item 3', price 3]];
 ```
