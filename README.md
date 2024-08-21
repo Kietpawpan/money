@@ -1,6 +1,6 @@
 # e-Receipt
 ## How to edit
-Given you have a new item and its price to be included in the e-Receipt, you can program as follows:
+Given you have a new item and its price to be included in the e-Receipt, you can do as follows:
 1. Open the index.html file.
 2. Copy and paste this code beneath the last item.:
 ```
