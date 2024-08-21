@@ -1,5 +1,14 @@
 # e-Receipt
-1. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
+## How to edit
+Given you have a new item and its price to be included in the e-Receipt, you can program as follows:
+1. Open the index.html file.
+2. Copy this code and paste it beneath the last item element:
+```
+
+```
+4.
+5.
+6. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
 ```
 var x = eval(decrypted.toString(CryptoJS.enc.Utf8));
 ```
