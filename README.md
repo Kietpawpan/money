@@ -9,7 +9,7 @@ Given you have a new item and its price to be included in the e-Receipt, you can
 <div class="detail" id="jn" type="text"></div>
 </div>
 ```
-> ![Note]
+> [!Note]
 > an and jn are the id of the divisions for item n and price n, respectively.
 
 4.
