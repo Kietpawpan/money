@@ -4,7 +4,8 @@ e-Receipt is a classified e-receipt, of which the items and prices can be access
 ## How to Use
 1. Open [e-Receipt](https://kietpawpan.github.io/money/)
 2. Enter the secret key.
-The encrypted data will be decrypted and turn the blank section to the printed one.
+> [!NOTE]
+> If the secret key is right, the encrypted data will be decrypted and the blank section printed.
 
 ## How to edit
 Given you have a new item and its price to be included in the [e-Receipt](https://kietpawpan.github.io/money/), you can do as follows:
