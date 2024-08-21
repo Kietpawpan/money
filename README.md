@@ -34,7 +34,7 @@ U2FsdGVkX18lLSq1grR569u8l621WOmlAZgCpp8TDUJDQhdvIkTuVCHtTrTDqtrMg4Z80yooZNw9V01A
 14. Replace the old cipher text with the new one.
 
 ## Coding Note
-7. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
+A decrypted text can be set as a variable value by using eval().
 ```
 var x = eval(decrypted.toString(CryptoJS.enc.Utf8));
 ```
