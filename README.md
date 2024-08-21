@@ -9,12 +9,15 @@ Given you have a new item and its price to be included in the e-Receipt, you can
 <div class="detail" id="jn" type="text"></div>
 </div>
 ```
+3. Edit the div id values:
 > [!Note]
-> an and jn are the id of the divisions for item n and price n, respectively.
+> "an" and "jn" are the id values for the divisions of the new item and the new price, respectively.
 
-4.
-5.
-6. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
+4. Copy the cipher text:
+```
+
+```
+7. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
 ```
 var x = eval(decrypted.toString(CryptoJS.enc.Utf8));
 ```
