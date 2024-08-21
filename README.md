@@ -4,8 +4,14 @@ Given you have a new item and its price to be included in the e-Receipt, you can
 1. Open the index.html file.
 2. Copy this code and paste it beneath the last item element:
 ```
-
+<div class="transactionDetails">
+<div class="detail" id="an"></div>
+<div class="detail" id="jn" type="text"></div>
+</div>
 ```
+> ![Note]
+> an and jn are the id of the divisions for item n and price n, respectively.
+
 4.
 5.
 6. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
