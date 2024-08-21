@@ -40,9 +40,16 @@ var x = eval(decrypted.toString(CryptoJS.enc.Utf8));
 ```
 2. A for loop was used for displaying the HTML elements' values (onload).
 ```
+for(let y=0; y<x.length;y++){
+  document.getElementById("a"+y).innerHTML = x[y][0];
+  document.getElementById("j"+y).innerHTML = x[y][1];
+}
 ```
 4. The data were stored in variable x as the two dimensional array:
 ```
 var x = [['item 1', price 1], ['item 2', price 2], ..., ['item 3', price 3]];
 ```
-   
+> [!NOTE]
+>      column 0 | column 1
+> row 0  x[0][0]   x[0][1]
+> row 1  x[1][0]   x[1][1]
