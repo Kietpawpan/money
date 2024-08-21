@@ -29,7 +29,12 @@ U2FsdGVkX18lLSq1grR569u8l621WOmlAZgCpp8TDUJDQhdvIkTuVCHtTrTDqtrMg4Z80yooZNw9V01A
 ```
  [['item 1', price 1], ['item 2', price 2], ..., ['item 3', price 3]], ['new item', new price]]
 ```
-13. 7. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
+12. Encrypt it with the same web app.
+13. Copy the new cipher text.
+14. Replace the old cipher text with the new one.
+
+## Coding Note
+7. Items and prices are top secret data, encrypted with an external encryption program, decrypted and evaluated oninput to be the variable value:
 ```
 var x = eval(decrypted.toString(CryptoJS.enc.Utf8));
 ```
