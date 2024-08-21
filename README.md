@@ -2,7 +2,7 @@
 e-Receipt is a classified e-receipt, of which the items and prices can be accessed with a secret key. The data have been encrypted with the Advanced Encryption Standard implemented in the JavaScript library: crypto.js.
 
 ## How to Use
-1. Go to the [e-Receipt homepage](https://kietpawpan.github.io/money/)
+1. Open [e-Receipt](https://kietpawpan.github.io/money/)
 2. Enter the secret key.
 3. The encrypted data will be decrypted and shown up.
 
