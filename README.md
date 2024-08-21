@@ -50,6 +50,9 @@ for(let y=0; y<x.length;y++){
 var x = [['item 1', price 1], ['item 2', price 2], ..., ['item 3', price 3]];
 ```
 > [!NOTE]
->      column 0 | column 1
-> row 0  x[0][0]   x[0][1]
-> row 1  x[1][0]   x[1][1]
+> Array references
+```
+         column 0  column 1
+  row 0  x[0][0]   x[0][1]
+  row 1  x[1][0]   x[1][1]
+```
