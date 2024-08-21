@@ -55,4 +55,6 @@ var x = [['item 1', price 1], ['item 2', price 2], ..., ['item 3', price 3]];
          column 0  column 1
   row 0  x[0][0]   x[0][1]
   row 1  x[1][0]   x[1][1]
+  row y  x[y][0]   x[y][1]
+          item     price
 ```
