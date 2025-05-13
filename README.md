@@ -1,5 +1,5 @@
 # e-Receipt
-e-Receipt is a classified e-receipt, of which the items and prices can be unlocked with a secret key. The data have been encrypted with an Advanced Encryption Standard implemented in the JavaScript library, called crypto.js.
+e-Receipt is a classified e-receipt, of which the data on items and prices can be unlocked with a secret key. The data have been encrypted with an Advanced Encryption Standard implemented in the JavaScript library, called crypto.js.
 
 ## How to Use
 1. Open [e-Receipt](https://kietpawpan.github.io/money/)
