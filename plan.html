@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนเกษียณและบำนาญ (Auto Saving)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
+        
+        body { font-family: 'Sarabun', sans-serif; background-color: #f1f5f9; padding: 10px; color: #0f172a; }
+        
+        /* --- Styles for App Mode --- */
+        .container { width: 98%; max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { text-align: center; margin-bottom: 5px; color: #1e3a8a; font-weight: 700; font-size: 24px; }
+        .subtitle { text-align: center; color: #64748b; margin-bottom: 20px; font-size: 14px; }
+
+        .control-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; }
+        .card-header { font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 5px; }
+        .input-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .input-group label { font-size: 13px; color: #475569; }
+        input { width: 85px; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: right; font-family: 'Sarabun'; font-size: 13px; font-weight: 600; color: #0f172a; background-color: #f8fafc; }
+
+        .retirement-plan-box { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #22c55e; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .retirement-header { color: #15803d; font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+        .retirement-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .retire-result { background: white; padding: 10px; border-radius: 8px; text-align: center; }
+        .retire-val { font-size: 24px; font-weight: 800; color: #15803d; }
+        .retire-label { font-size: 13px; color: #64748b; }
+        .highlight-income { color: #16a34a; font-size: 28px; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .sum-box { padding: 10px; border-radius: 8px; text-align: center; color: white; }
+        .bg-wealth { background: linear-gradient(135deg, #1e293b, #334155); }
+        .bg-savings { background: linear-gradient(135deg, #059669, #10b981); }
+        .bg-gpf { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .bg-car { background: linear-gradient(135deg, #d97706, #f59e0b); }
+        .bg-remain { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+        .sum-title { font-size: 12px; opacity: 0.9; }
+        .sum-value { font-size: 18px; font-weight: 700; }
+
+        .table-container { overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; background: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        thead { background-color: #1e293b; color: white; }
+        th { padding: 8px 4px; border-right: 1px solid #334155; text-align: center; font-weight: 500; white-space: nowrap; }
+        td { padding: 6px 4px; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; text-align: right; }
+        .col-year { background-color: #f1f5f9; font-weight: bold; text-align: center; color: #334155; }
+        .table-input { width: 60px; padding: 2px; color: #dc2626; background: #fff; font-size: 12px; }
+        
+        .th-group-tax { background-color: #991b1b; }
+        .th-group-family { background-color: #4338ca; }
+        .th-group-car { background-color: #b45309; }
+        .text-green { color: #16a34a; }
+        .text-red { color: #dc2626; }
+        .highlight-extra-save { color: #059669; font-weight: 700; }
+
+        /* --- PREVIEW MODE STYLES (Hidden by default) --- */
+        #previewContainer {
+            display: none; 
+            background: white;
+            padding: 20px;
+            max-width: 100%;
+        }
+        .preview-action-bar {
+            position: sticky; top: 0;
+            background: #fff7ed;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid orange;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .btn-preview-action {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Sarabun';
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        .btn-back { background: #64748b; color: white; }
+        .btn-print-real { background: #16a34a; color: white; }
+        
+        /* Styles for Printed Input Parameters */
+        .print-param-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 Columns */
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .print-card {
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            border-radius: 4px;
+            background: #f8fafc;
+        }
+        .print-card h3 {
+            margin: 0 0 5px 0;
+            font-size: 11px;
+            color: #1e3a8a;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 2px;
+        }
+        .p-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            margin-bottom: 3px;
+            color: #333;
+        }
+        .p-row span { color: #64748b; }
+        
+        /* Print Table Styles */
+        .print-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .print-table th, .print-table td { border: 1px solid #ccc; padding: 4px; text-align: right; }
+        .print-table th { background: #f0f0f0; text-align: center; }
+        
+        .print-summary-box { display: flex; justify-content: space-around; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; }
+        .print-sum-item { text-align: center; }
+        .print-sum-label { font-size: 10px; color: #666; }
+        .print-sum-val { font-size: 16px; font-weight: bold; }
+
+        /* --- Button in App Mode --- */
+        .btn-go-preview {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Sarabun';
+            cursor: pointer;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+        .btn-go-preview:hover { background-color: #1d4ed8; }
+
+        /* --- PRINT MEDIA QUERY --- */
+        @media print {
+            body * { visibility: hidden; }
+            #previewContainer, #previewContainer * { visibility: visible; }
+            #previewContainer { position: absolute; left: 0; top: 0; width: 100%; padding: 0; margin: 0; }
+            .preview-action-bar { display: none; } 
+            
+            /* Adjust layout for print */
+            .print-param-container { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+            .print-card { background: white; border: 1px solid #999; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="appContainer">
+    <button class="btn-go-preview" onclick="switchToPreview()">
+        🖨️ กดปุ่มนี้เพื่อดูตัวอย่างก่อนพิมพ์ (Print Preview)
+    </button>
+
+    <h1>แผนเกษียณและบำนาญ</h1>
+    <div class="subtitle">สถานการณ์จำลอง ปี 2569 - 2579</div>
+
+    <div class="control-panel">
+        <div class="card">
+            <div class="card-header">1. รายได้ (Income)</div>
+            <div class="input-group"><label>เงินเดือนเริ่ม:</label><input type="number" id="startSalary" value="60570" oninput="calculateAll()"></div>
+            <div class="input-group"><label>ขึ้นเงินเดือน (%):</label><input type="number" id="growthRate" value="5" step="0.5" oninput="calculateAll()"></div>
+            <div class="input-group"><label>เงินเดือนตัน:</label><input type="number" id="salaryCap" value="74320" oninput="calculateAll()"></div>
+            <div class="input-group"><label>ค่าตอบแทน:</label><input type="number" id="compensation" value="20000" oninput="calculateAll()"></div>
+        </div>
+        <div class="card" style="border-left: 3px solid #3b82f6;">
+            <div class="card-header" style="color:#2563eb;">2. กบข. & ภาษี</div>
+            <div class="input-group"><label>ต้น กบข.:</label><input type="number" id="initialGPF" value="600000" oninput="calculateAll()"></div>
+            <div class="input-group"><label>ผลตอบแทน (%):</label><input type="number" id="gpfReturn" value="2.0" step="0.1" oninput="calculateAll()"></div>
+            <div class="input-group"><label>หักสะสม (%):</label><input type="number" id="gpfRate" value="3" oninput="calculateAll()"></div>
+            <div class="input-group"><label>ลดหย่อนอื่น:</label><input type="number" id="otherDeduction" value="90000" oninput="calculateAll()"></div>
+        </div>
+        <div class="card">
+            <div class="card-header">3. ออม & รถยนต์</div>
+            <div class="input-group"><label style="color:#16a34a; font-weight:bold;">เงินสดเดิม:</label><input type="number" id="initialPersonalSave" value="400000" oninput="calculateAll()" style="color:#16a34a; font-weight:bold;"></div>
+            <div class="input-group"><label>ออมพื้นฐาน (ด):</label><input type="number" id="personalSave" value="30000" oninput="calculateAll()"></div>
+             <div class="input-group"><label style="color:#d97706; font-weight:600;">ใช้จ่ายไม่เกิน:</label><input type="number" id="spendingLimit" value="15000" oninput="calculateAll()" style="color:#d97706; background:#fff7ed;"></div>
+            <div class="input-group"><label>กองทุนรถ (ด):</label><input type="number" id="carFundMonthly" value="8000" oninput="calculateAll()"></div>
+            <div class="input-group"><label>ทุนรถเดิม:</label><input type="number" id="initialCarFund" value="63000" oninput="calculateAll()"></div>
+        </div>
+        <div class="card">
+            <div class="card-header">4. ครอบครัว & ประกัน</div>
+            <div class="input-group"><label>ให้ครอบครัว:</label><input type="number" id="familySupport" value="16000" oninput="calculateAll()"></div>
+            <div class="input-group"><label>การศึกษา:</label><input type="number" id="education" value="2000" oninput="calculateAll()"></div>
+             <div class="input-group"><label>เบี้ยประกันรถ:</label><input type="number" id="defaultInsurance" value="35000" oninput="updateDefaultInsurance()"></div>
+        </div>
+    </div>
+    
+    <div class="retirement-plan-box">
+        <div class="retirement-header">🏖️ วางแผนรายได้หลังเกษียณ</div>
+        <div class="control-panel" style="margin-bottom: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+             <div class="input-group" style="background: white; padding: 5px; border-radius: 6px;">
+                <label>เวลาราชการ (ปี):</label><input type="number" id="serviceYears" value="27" oninput="calculateAll()">
+            </div>
+            <div class="input-group" style="background: white; padding: 5px; border-radius: 6px;">
+                <label>ลงทุนต่อ (%):</label><input type="number" id="investPercent" value="60" max="100" oninput="calculateAll()">
+            </div>
+            <div class="input-group" style="background: white; padding: 5px; border-radius: 6px;">
+                <label>ผลตอบแทน (%/ปี):</label><input type="number" id="investReturn" value="3.0" step="0.1" oninput="calculateAll()">
+            </div>
+        </div>
+
+        <div class="retirement-grid">
+            <div class="retire-result">
+                <div class="retire-label">เงินบำนาญ (บาท/เดือน)</div>
+                <div class="retire-val" id="pensionVal">0</div>
+            </div>
+            <div class="retire-result">
+                <div class="retire-label">ดอกเบี้ยเงินออม (บาท/เดือน)</div>
+                <div class="retire-val" id="investmentIncomeVal">0</div>
+            </div>
+            <div class="retire-result" style="border: 2px solid #16a34a;">
+                <div class="retire-label" style="color: #16a34a; font-weight: 700;">รายได้รวมหลังเกษียณ (บาท/เดือน)</div>
+                <div class="retire-val highlight-income" id="totalRetireIncome">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="summary-grid">
+        <div class="sum-box bg-wealth"><div class="sum-title">ทรัพย์สินสุทธิ (วันเกษียณ)</div><div class="sum-value" id="grandTotalWealth">0</div></div>
+        <div class="sum-box bg-savings"><div class="sum-title">ออมส่วนตัว (รวม Extra)</div><div class="sum-value" id="sumPersonalSavings">0</div></div>
+        <div class="sum-box bg-gpf"><div class="sum-title">กบข. รวม</div><div class="sum-value" id="sumGPF">0</div></div>
+        <div class="sum-box bg-car"><div class="sum-title">กองทุนรถเหลือ</div><div class="sum-value" id="sumCarFund">0</div></div>
+        <div class="sum-box bg-remain"><div class="sum-title">เหลือใช้/เดือน (คงที่)</div><div class="sum-value" id="avgMonthlyRemain">0</div></div>
+    </div>
+
+    <div class="table-container">
+        <table id="resultTable">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="col-year">พ.ศ.</th>
+                    <th rowspan="2">รายได้รวม<br>(ปี)</th>
+                    <th colspan="2" class="th-group-tax">ภาษี</th>
+                    <th rowspan="2" style="background:#0f172a;">สุทธิ<br>(Take Home)</th>
+                    <th colspan="3" class="th-group-family">หักรายจ่าย (ปี)</th>
+                    <th colspan="3" class="th-group-car">รถยนต์</th>
+                    <th rowspan="2" style="background:#16a34a;">เหลือใช้<br>(เดือน)</th>
+                </tr>
+                <tr>
+                    <th style="font-size:11px; background:#7f1d1d;">บาท</th>
+                    <th style="font-size:11px; background:#7f1d1d;">%</th>
+                    <th style="font-size:11px; background:#3730a3;">ออมรวม</th>
+                    <th style="font-size:11px; background:#3730a3;">กองรถ</th>
+                    <th style="font-size:11px; background:#3730a3;">ครอบครัว</th>
+                    <th style="font-size:11px; background:#92400e;">ประกัน</th>
+                    <th style="font-size:11px; background:#92400e;">ซ่อม</th>
+                    <th style="font-size:11px; background:#92400e;">กองเหลือ</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="previewContainer">
+    <div class="preview-action-bar">
+        <button class="btn-preview-action btn-back" onclick="backToEdit()">⬅️ กลับไปแก้ไข</button>
+        <button class="btn-preview-action btn-print-real" onclick="window.print()">🖨️ สั่งพิมพ์ / Save PDF</button>
+    </div>
+    
+    <div style="text-align:center; margin-bottom:15px;">
+        <h2 style="margin:0;">รายงานแผนเกษียณและบำนาญ</h2>
+        <div style="color:#666; font-size:12px;">ข้อมูลจำลอง ณ วันที่ <span id="printDate"></span></div>
+    </div>
+
+    <div id="printInputArea"></div>
+
+    <div class="print-summary-box">
+        <div class="print-sum-item">
+            <div class="print-sum-label">ทรัพย์สินสุทธิ</div>
+            <div class="print-sum-val" id="p_wealth">0</div>
+        </div>
+        <div class="print-sum-item">
+            <div class="print-sum-label">บำนาญต่อเดือน</div>
+            <div class="print-sum-val" id="p_pension">0</div>
+        </div>
+        <div class="print-sum-item">
+            <div class="print-sum-label">รายได้รวมเกษียณ</div>
+            <div class="print-sum-val" id="p_income">0</div>
+        </div>
+        <div class="print-sum-item">
+            <div class="print-sum-label">เงินเหลือใช้/เดือน</div>
+            <div class="print-sum-val" id="p_remain">0</div>
+        </div>
+    </div>
+
+    <div id="printTableArea"></div>
+</div>
+
+<script>
+    const defaultMaintExp = {
+        2569: 10000, 2570: 40000, 2571: 15000, 2572: 15000, 
+        2573: 50000, 2574: 40000, 2575: 20000, 2576: 25000, 
+        2577: 65000, 2578: 40000, 2579: 15000
+    };
+    let userMaintExpenses = {};
+    let userInsExpenses = {};
+    let baseInsurance = 35000;
+    let salaryHistory = [];
+
+    window.onload = function() { calculateAll(); };
+
+    // --- Switch Logic ---
+    function switchToPreview() {
+        // 1. ดึงค่าสรุป
+        document.getElementById('p_wealth').innerText = document.getElementById('grandTotalWealth').innerText;
+        document.getElementById('p_pension').innerText = document.getElementById('pensionVal').innerText;
+        document.getElementById('p_income').innerText = document.getElementById('totalRetireIncome').innerText;
+        document.getElementById('p_remain').innerText = document.getElementById('avgMonthlyRemain').innerText;
+        document.getElementById('printDate').innerText = new Date().toLocaleDateString('th-TH');
+
+        // 2. [NEW] สร้างตารางแสดงค่า Input (Parameters)
+        let paramHtml = '<div class="print-param-container">';
+        
+        // Loop through all input Cards in main app (including Retirement box)
+        const paramCards = document.querySelectorAll('#appContainer .control-panel .card, #appContainer .retirement-plan-box .control-panel');
+        
+        // Add Retirement Params manually (since they are in a different container structure)
+        const inputs = [];
+        
+        // Helper to extract inputs
+        function extractInputsFromContainer(container, title) {
+            let html = `<div class="print-card"><h3>${title}</h3>`;
+            const groups = container.querySelectorAll('.input-group');
+            groups.forEach(g => {
+                const label = g.querySelector('label').innerText;
+                const val = g.querySelector('input').value;
+                html += `<div class="p-row"><span>${label}</span> <b>${Number(val).toLocaleString()}</b></div>`;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Main Control Panel Cards
+        const mainCards = document.querySelectorAll('#appContainer > .control-panel .card');
+        mainCards.forEach(card => {
+            const header = card.querySelector('.card-header').innerText;
+            paramHtml += extractInputsFromContainer(card, header);
+        });
+
+        // Retirement Params
+        const retireParams = document.querySelector('.retirement-plan-box .control-panel');
+        paramHtml += extractInputsFromContainer(retireParams, '5. แผนเกษียณ (Retirement)');
+
+        paramHtml += '</div>';
+        document.getElementById('printInputArea').innerHTML = paramHtml;
+
+        // 3. Clone Table และแปลง Input เป็น Text
+        const originalTable = document.getElementById('resultTable');
+        const cloneTable = originalTable.cloneNode(true);
+        cloneTable.classList.add('print-table');
+        
+        const tableInputs = cloneTable.querySelectorAll('input');
+        tableInputs.forEach(input => {
+            const val = input.value;
+            const span = document.createElement('span');
+            span.innerText = Number(val).toLocaleString(); 
+            span.style.fontWeight = "bold";
+            input.parentNode.replaceChild(span, input);
+        });
+
+        // 4. ใส่ลง Preview Container
+        const printArea = document.getElementById('printTableArea');
+        printArea.innerHTML = '';
+        printArea.appendChild(cloneTable);
+
+        // 5. สลับหน้า
+        document.getElementById('appContainer').style.display = 'none';
+        document.getElementById('previewContainer').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function backToEdit() {
+        document.getElementById('previewContainer').style.display = 'none';
+        document.getElementById('appContainer').style.display = 'block';
+    }
+
+    // --- Logic คำนวณเดิม ---
+    function updateDefaultInsurance() {
+        baseInsurance = parseFloat(document.getElementById('defaultInsurance').value) || 35000;
+        calculateAll();
+    }
+
+    function calculateAll() {
+        let salary = parseFloat(document.getElementById('startSalary').value) || 0;
+        let growth = parseFloat(document.getElementById('growthRate').value) / 100 || 0;
+        let cap = parseFloat(document.getElementById('salaryCap').value) || 0;
+        let comp = parseFloat(document.getElementById('compensation').value) || 0;
+        
+        let gpfPrincipal = parseFloat(document.getElementById('initialGPF').value) || 0;
+        let gpfReturnRate = parseFloat(document.getElementById('gpfReturn').value) / 100 || 0;
+        let gpfRate = parseFloat(document.getElementById('gpfRate').value) / 100 || 0;
+        let otherDed = parseFloat(document.getElementById('otherDeduction').value) || 0;
+        
+        let initialPersonalSave = parseFloat(document.getElementById('initialPersonalSave').value) || 0;
+        let personalSaveMonthBase = parseFloat(document.getElementById('personalSave').value) || 0;
+        let spendingLimit = parseFloat(document.getElementById('spendingLimit').value) || 12000;
+        
+        let carSaveMonth = parseFloat(document.getElementById('carFundMonthly').value) || 0;
+        let carFundBalance = parseFloat(document.getElementById('initialCarFund').value) || 0;
+        let familyMonth = parseFloat(document.getElementById('familySupport').value) || 0;
+        let eduMonth = parseFloat(document.getElementById('education').value) || 0;
+        let totalFamilyMonth = familyMonth + eduMonth;
+        
+        let serviceYears = parseFloat(document.getElementById('serviceYears').value) || 27;
+        let investPercent = parseFloat(document.getElementById('investPercent').value) / 100 || 0;
+        let investReturn = parseFloat(document.getElementById('investReturn').value) / 100 || 0;
+
+        let totalPersonalSavings = initialPersonalSave; 
+        let gpfBalance = gpfPrincipal;
+        let sumMonthlyRemain = 0;
+        let countYears = 0;
+        
+        salaryHistory = [];
+        const tbody = document.querySelector('#resultTable tbody');
+        tbody.innerHTML = '';
+
+        for (let year = 2569; year <= 2579; year++) {
+            let months = (year === 2579) ? 9 : 12;
+            for(let m=0; m<months; m++) salaryHistory.push(salary);
+
+            let annualSalary = salary * months;
+            let annualComp = comp * months;
+            let totalIncome = annualSalary + annualComp;
+            let gpfDeduction = annualSalary * gpfRate;
+            let stdExp = Math.min(totalIncome * 0.5, 100000);
+            let netTaxable = totalIncome - stdExp - otherDed - gpfDeduction;
+            let taxVal = calcTax(netTaxable);
+            let taxBracket = getTaxBracket(netTaxable);
+            let netTakeHome = totalIncome - taxVal - gpfDeduction;
+
+            let baseYearSave = personalSaveMonthBase * months;
+            let yearCarSave = carSaveMonth * months;
+            let yearFamilyEdu = totalFamilyMonth * months;
+            let tentativeRemainingYear = netTakeHome - baseYearSave - yearCarSave - yearFamilyEdu;
+            let tentativeRemainingMonth = tentativeRemainingYear / months;
+
+            let actualRemainingMonth = tentativeRemainingMonth;
+            let extraSavingsMonth = 0;
+            if (tentativeRemainingMonth > spendingLimit) {
+                extraSavingsMonth = tentativeRemainingMonth - spendingLimit;
+                actualRemainingMonth = spendingLimit;
+            }
+
+            let extraSavingsYear = extraSavingsMonth * months;
+            let totalYearSave = baseYearSave + extraSavingsYear;
+            totalPersonalSavings += totalYearSave;
+
+            let thisYearIns = userInsExpenses[year] !== undefined ? userInsExpenses[year] : baseInsurance;
+            let thisYearMaint = userMaintExpenses[year] !== undefined ? userMaintExpenses[year] : defaultMaintExp[year];
+            if (thisYearMaint === undefined) thisYearMaint = 10000;
+            let totalCarExp = thisYearIns + thisYearMaint;
+            
+            carFundBalance = carFundBalance + yearCarSave - totalCarExp;
+            sumMonthlyRemain += actualRemainingMonth;
+            countYears++;
+
+            let govContrib = annualSalary * 0.03; 
+            gpfBalance = (gpfBalance + gpfDeduction + govContrib) * (1 + gpfReturnRate);
+            let saveStyle = extraSavingsYear > 0 ? "highlight-extra-save" : "color:#4338ca;";
+
+            let rowHtml = `
+                <tr>
+                    <td class="col-year">${year}</td>
+                    <td>${formatNum(totalIncome)}</td>
+                    <td style="color:#dc2626;">${formatNum(taxVal)}</td>
+                    <td style="text-align:center;">${taxBracket}%</td>
+                    <td style="font-weight:bold;">${formatNum(netTakeHome)}</td>
+                    <td style="${saveStyle}">${formatNum(totalYearSave)}</td>
+                    <td style="color:#4338ca;">${formatNum(yearCarSave)}</td>
+                    <td style="color:#4338ca;">${formatNum(yearFamilyEdu)}</td>
+                    <td><input type="number" class="table-input" value="${thisYearIns}" oninput="updateIns(${year}, this.value)"></td>
+                    <td><input type="number" class="table-input" value="${thisYearMaint}" oninput="updateMaint(${year}, this.value)"></td>
+                    <td class="${carFundBalance < 0 ? 'text-red' : 'text-green'}" style="font-weight:bold;">${formatNum(carFundBalance)}</td>
+                    <td style="background:#16a34a; color:white; font-weight:bold;">${formatNum(actualRemainingMonth)}</td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', rowHtml);
+
+            if (year < 2579) {
+                salary = salary * (1 + growth);
+                if (salary > cap) salary = cap;
+            }
+        }
+
+        let positiveCarFund = carFundBalance > 0 ? carFundBalance : 0;
+        let grandTotal = totalPersonalSavings + gpfBalance + positiveCarFund;
+
+        animateValue("grandTotalWealth", grandTotal);
+        animateValue("sumPersonalSavings", totalPersonalSavings);
+        animateValue("sumGPF", gpfBalance);
+        animateValue("sumCarFund", carFundBalance);
+        animateValue("avgMonthlyRemain", sumMonthlyRemain / countYears);
+        
+        let carBox = document.getElementById("sumCarFund").parentElement;
+        carBox.style.background = carFundBalance < 0 ? "linear-gradient(135deg, #ef4444, #b91c1c)" : "linear-gradient(135deg, #d97706, #fbbf24)";
+
+        let last60 = salaryHistory.slice(-60);
+        let sum60 = last60.reduce((a, b) => a + b, 0);
+        let avg60 = sum60 / last60.length;
+        let pension = (avg60 * serviceYears) / 50;
+        let maxPension = avg60 * 0.70;
+        if (pension > maxPension) pension = maxPension;
+        
+        animateValue("pensionVal", pension);
+        let investCapital = grandTotal * investPercent;
+        let monthlyInvestIncome = (investCapital * investReturn) / 12;
+        animateValue("investmentIncomeVal", monthlyInvestIncome);
+        animateValue("totalRetireIncome", pension + monthlyInvestIncome);
+    }
+
+    function updateMaint(year, val) {
+        userMaintExpenses[year] = parseFloat(val) || 0;
+        calculateAll();
+    }
+    function updateIns(year, val) {
+        userInsExpenses[year] = parseFloat(val) || 0;
+        calculateAll();
+    }
+    function calcTax(net) {
+        if (net <= 150000) return 0;
+        let tax = 0;
+        if (net > 150000) tax += (Math.min(net, 300000) - 150000) * 0.05;
+        if (net > 300000) tax += (Math.min(net, 500000) - 300000) * 0.10;
+        if (net > 500000) tax += (Math.min(net, 750000) - 500000) * 0.15;
+        if (net > 750000) tax += (Math.min(net, 1000000) - 750000) * 0.20;
+        if (net > 1000000) tax += (Math.min(net, 2000000) - 1000000) * 0.25;
+        return Math.round(tax);
+    }
+    function getTaxBracket(net) {
+        if (net <= 150000) return 0;
+        if (net <= 300000) return 5;
+        if (net <= 500000) return 10;
+        if (net <= 750000) return 15;
+        if (net <= 1000000) return 20;
+        if (net <= 2000000) return 25;
+        return 30;
+    }
+    function formatNum(num) {
+        return Math.round(num).toLocaleString();
+    }
+    function animateValue(id, end) {
+        document.getElementById(id).innerText = formatNum(end);
+    }
+</script>
+
+</body>
+</html>
