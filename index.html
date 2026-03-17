@@ -1,621 +1,183 @@
 <!Copyright(c) 2023 Montri Kiatphaophan All rights reserved.>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
+    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet'>
+</head>
+<body>
+    <div id="showScroll" class="container">
+        <div class="receipt">
+            <div class="logo">
+                <div class='companyName'>MONTE</div>
+                <div class='slogan'>e-Services</div>
+            </div>
+                                            
+            <div class="address">
+                ใบเสร็จอิเล็กทรอนิกส์<br>
+            </div>
+
+            <div class="transactionDetails" style="display:none;">
+                <div class="detail">Reg#17</div>
+                <div class="detail">TRN#1313</div>
+                <div class="detail">CSHR#00097655</div>
+                <div class="detail">str#9852</div>
+            </div>
+
+            <div class="feedback">
+                <div class="break">
+                    <input type="text" id="key2" width="100%" placeholder="secret key" oninput="dec()">
+                    <br><br>
+                    
+                    <div class="survey"><b>รายรับ:</b></div>
+                    <div id="incomeList"></div>
+                    
+                    <div class="break">**********************************</div>
+
+                    <div class="survey"><b>รายจ่าย:</b></div>
+                    <div id="expenseList"></div>
+
+                    <div class="break">**********************************</div>
+
+                    <div class="transactionDetails">
+                        <div class="detail">รวมรายจ่าย</div>
+                        <div class="detail" id='total'>0.00</div>
+                    </div>
+                    <div class="transactionDetails">
+                        <div class="detail"></div>
+                        <div class="detail" id='totalText' style="font-size: 0.8em; font-weight: normal;"></div>
+                    </div>
+
+                    <div class="tripSummary">
+                        <div>คงเหลือสุทธิ: <br></div>           
+                        <div class="transactionDetails">
+                            <div class="detail"></div>
+                            <div class="detail" id='equity' style="font-size: 1.2em;">0.00</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="center">ขอบพระคุณครับ</p>   
+                <div class="break">**********************************</div>
+            </div>
+        </div>
+    </div>
 
-    <html>
-        <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-                <meta charset="UTF-8">
-                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-                       <link type="text/css" rel="stylesheet" href="css/style.css">
-                       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
-                       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
-                       <link href='https://fonts.googleapis.com/css?family=Orbitron'>
-
-        </head>
-                                    <body>
-
-                                        <div id="showScroll" class="container">
-                                            <div class="receipt"><div class="logo">
-                                                <div class='companyName'>MONTE</div>
-                                                <div class='slogan'>e-Services</div>
-</div>
-											
-<div class="address">
-ใบเสร็จอิเล็กทรอนิกส์<br>
-</div>
-
-						    <div class="transactionDetails" style="display:none;">
-                                                    <div class="detail">Reg#17</div>
-                                                    <div class="detail">TRN#1313</div>
-                                                    <div class="detail">CSHR#00097655</div>
-                                                    <div class="detail">str#9852</div>
-                                                </div>
-
-                                                <div class="survey bold">
-                                                    <p>รายการ:</p>
-                                                    <p class="surveyID"></p>
-                                                </div>
-<div class="transactionDetails">
-<div class="detail" id="a0"></div>
-<div class="detail" id="j0" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a1"></div>
-<div class="detail" id="j1" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a2"></div>
-<div class="detail" id="j2" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a3"></div>
-<div class="detail" id="j3" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a4"></div>
-<div class="detail" id="j4" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a5"></div>
-<div class="detail" id="j5" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a6"></div>
-<div class="detail" id="j6" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a7"></div>
-<div class="detail" id="j7" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a8"></div>
-<div class="detail" id="j8" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a9"></div>
-<div class="detail" id="j9" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a10"></div>
-<div class="detail" id="j10" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a11"></div>
-<div class="detail" id="j11" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a12"></div>
-<div class="detail" id="j12" type="text"></div>
-</div>
-<div class="transactionDetails">
-<div class="detail" id="a13"></div>
-<div class="detail" id="j13" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a14"></div>
-<div class="detail" id="j14" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a15"></div>
-<div class="detail" id="j15" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a16"></div>
-<div class="detail" id="j16" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a17"></div>
-<div class="detail" id="j17" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a18"></div>
-<div class="detail" id="j18" type="text"></div>
-</div>
-
-	
-<div class="transactionDetails">
-<div class="detail" id="a19"></div>
-<div class="detail" id="j19" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a20"></div>
-<div class="detail" id="j20" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a21"></div>
-<div class="detail" id="j21" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a22"></div>
-<div class="detail" id="j22" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a23"></div>
-<div class="detail" id="j23" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a24"></div>
-<div class="detail" id="j24" type="text"></div>
-</div>
-						    
-<div class="transactionDetails">
-<div class="detail" id="a25"></div>
-<div class="detail" id="j25" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a26"></div>
-<div class="detail" id="j26" type="text"></div>
-</div>
-						    
-<div class="transactionDetails">
-<div class="detail" id="a27"></div>
-<div class="detail" id="j27" type="text"></div>
-</div>				    
-
-<div class="transactionDetails">
-<div class="detail" id="a28"></div>
-<div class="detail" id="j28" type="text"></div>
-</div>			
-						    
-<div class="transactionDetails">
-<div class="detail" id="a29"></div>
-<div class="detail" id="j29" type="text"></div>
-</div>				    
-
-<div class="transactionDetails">
-<div class="detail" id="a30"></div>
-<div class="detail" id="j30" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a31"></div>
-<div class="detail" id="j31" type="text"></div>
-</div>	
-						    
-<div class="transactionDetails">
-<div class="detail" id="a32"></div>
-<div class="detail" id="j32" type="text"></div>
-</div>	
-
-<div class="transactionDetails">
-<div class="detail" id="a33"></div>
-<div class="detail" id="j33" type="text"></div>
-</div>	
-						    
-<div class="transactionDetails">
-<div class="detail" id="a34"></div>
-<div class="detail" id="j34" type="text"></div>
-</div>	
-						    
-<div class="transactionDetails">
-<div class="detail" id="a35"></div>
-<div class="detail" id="j35" type="text"></div>
-</div>		
-						    
-<div class="transactionDetails">
-<div class="detail" id="a36"></div>
-<div class="detail" id="j36" type="text"></div>
-</div>
-						    
-<div class="transactionDetails">
-<div class="detail" id="a37"></div>
-<div class="detail" id="j37" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a38"></div>
-<div class="detail" id="j38" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a39"></div>
-<div class="detail" id="j39" type="text"></div>
-</div>
-						    
-<div class="transactionDetails">
-<div class="detail" id="a40"></div>
-<div class="detail" id="j40" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a41"></div>
-<div class="detail" id="j41" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a42"></div>
-<div class="detail" id="j42" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a43"></div>
-<div class="detail" id="j43" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a44"></div>
-<div class="detail" id="j44" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a45"></div>
-<div class="detail" id="j45" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a46"></div>
-<div class="detail" id="j46" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a47"></div>
-<div class="detail" id="j47" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a48"></div>
-<div class="detail" id="j48" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a49"></div>
-<div class="detail" id="j49" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a50"></div>
-<div class="detail" id="j50" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a51"></div>
-<div class="detail" id="j51" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a52"></div>
-<div class="detail" id="j52" type="text"></div>
-</div>
-												
-<div class="transactionDetails">
-<div class="detail" id="a53"></div>
-<div class="detail" id="j53" type="text"></div>
-</div>
-
-<div class="transactionDetails">
-<div class="detail" id="a54"></div>
-<div class="detail" id="j54" type="text"></div>
-</div>			
-												
-<div class="transactionDetails">
-<div class="detail" id="a55"></div>
-<div class="detail" id="j55" type="text"></div>
-</div>		
-												
-<div class="transactionDetails">
-<div class="detail" id="a56"></div>
-<div class="detail" id="j56" type="text"></div>
-</div>		
-												
-<div class="transactionDetails">
-<div class="detail" id="a57"></div>
-<div class="detail" id="j57" type="text"></div>
-</div>		
-
-<div class="transactionDetails">
-<div class="detail" id="a58"></div>
-<div class="detail" id="j58" type="text"></div>
-</div>	
-
-<div class="transactionDetails">
-<div class="detail" id="a59"></div>
-<div class="detail" id="j59" type="text"></div>
-</div>				
-												
-<div class="transactionDetails">								
-<div class="detail" id="a60"></div>
-<div class="detail" id="j60" type="text"></div>
-</div>		
-												
-<div class="transactionDetails">								
-<div class="detail" id="a61"></div>
-<div class="detail" id="j61" type="text"></div>
-</div>	
-
-<div class="transactionDetails">								
-<div class="detail" id="a62"></div>
-<div class="detail" id="j62" type="text"></div>
-</div>	
-												
-<div class="transactionDetails">								
-<div class="detail" id="a63"></div>
-<div class="detail" id="j63" type="text"></div>
-</div>	
-												
-<div class="transactionDetails">								
-<div class="detail" id="a64"></div>
-<div class="detail" id="j64" type="text"></div>
-</div>													
-												
-<div class="transactionDetails">
-<div class="detail"><b>รวม</b></div><b><div class="detail" id='total'></div></b>
-</div>
-
-<div class="transactionDetails">
-<div class="detail"><b></div>
-<div class="detail" id='totalText'></div></b>
-</div>
-
-                                       					
-					<!--div class="tripSummary">
-                                            <div><b>ทุน:</b> <br></div>			
-                                            <div class="transactionDetails">
-                                                <div class="detail"><b></div>
-                                                <div class="detail" id='int'></div></b>
-						</div>
-					</div>-->
-
-                                        <div class="tripSummary">
-                                            <div><b>คงเหลือ:</b> <br></div>			
-                                            <div class="transactionDetails">
-                                                <div class="detail"><b></div>
-                                                <div class="detail" id='equity'></div></b>
-						</div>
-					</div>
-                              
-                                      <div class="feedback">
-			<div class="break">
-
-<input type="text" id="key2" width="100%" placeholder="secret key" oninput="dec()";>
-
-<textarea id="data2" hidden>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</textarea>
-
-<div class="transactionDetails">
-</div>
-			
-<script>
-function dec(){
-var encrypted = document.getElementById('data2').value;
-var key = document.getElementById('key2').value;
-var decrypted = CryptoJS.AES.decrypt(encrypted, key);
-decrypted.toString(CryptoJS.enc.Utf8);
-var x = eval(decrypted.toString(CryptoJS.enc.Utf8));
-
-  var fund = 44854.20+50000.00;
-  let sum = 0;
-  for(let i=0; i<x.length;i++){sum += x[i][1];}
-  var eq = fund - sum;
-  var equity = eq.toLocaleString('en-US');
-  var total = sum.toLocaleString('en-US');
-
-  document.getElementById("total").innerHTML = total;
-  // document.getElementById("int").innerHTML = fund.toLocaleString('en-US');
-
-for(let y=0; y<x.length;y++){
-  document.getElementById("a"+y).innerHTML = x[y][0];
-  document.getElementById("j"+y).innerHTML = x[y][1].toLocaleString('en-US');
-}
-
-var thName = sum;
-var n0 = thName.toString(); // "1,000,000,000.00"
-var n1 = n0.replace(/,/g,""); //"1000000000.00"
-var n2 ="";
-if(n1.includes('.')==false){n2 = n1 + '.00';}
-else{n2 = n1;}
-var sName = n2.split("."); // sName[0]="1000000000", sName [1]="00"
-var t1 = Array.from(sName[0]); // 1,0,0,0,0,0,0,0,0,0
-var t11 = t1.reverse(); // 0,0,0,0,0,0,0,0,0,1
-var t2 = Array.from(sName[1]); // 0,0
-
-
-                                        const panLan = new Map([
-                                        ['',''],
-                                        ['0',''],['1','หนึ่งพัน'],['2','สองพัน'],['3','สามพัน'],
-                                        ['4','สี่พัน'],['5','ห้าพัน'],['6','หกพัน'],
-                                        ['7','เจ็ดพัน'],['8','แปดพัน'],['9','เก้าพัน'],
-                                        ]);
-                                        const roiLan = new Map([
-                                        ['',''],
-                                        ['0',''],['1','หนึ่งร้อย'],['2','สองร้อย'],['3','สามร้อย'],
-                                        ['4','สี่ร้อย'],['5','ห้าร้อย'],['6','หกร้อย'],
-                                        ['7','เจ็ดร้อย'],['8','แปดร้อย'],['9','เก้าร้อย'],
-                                        ]);
-
-
-                                        const sipLan = new Map([
-                                        ['0',''],['1','สิบ'],['2','ยี่สิบ'],['3','สามสิบ'],
-                                        ['4','สี่สิบ'],['5','ห้าสิบ'],['6','หกสิบ'],
-                                        ['7','เจ็ดสิบ'],['8','แปดสิบ'],['9','เก้าสิบ'],
-                                        ]);
-
-                                        const lan = new Map([
-                                        ['0','ล้าน'],['1','หนึ่งล้าน'],['2','สองล้าน'],['3','สามล้าน'],
-                                        ['4','สี่ล้าน'],['5','ห้าล้าน'],['6','หกล้าน'],
-                                        ['7','เจ็ดล้าน'],['8','แปดล้าน'],['9','เก้าล้าน'],
-                                        ]);
-
-                                        const lan2 = new Map([
-                                        ['1','เอ็ดล้าน'],['2','สองล้าน'],['3','สามล้าน'],
-                                        ['4','สี่ล้าน'],['5','ห้าล้าน'],['6','หกล้าน'],
-                                        ['7','เจ็ดล้าน'],['8','แปดล้าน'],['9','เก้าล้าน'],['0','ล้าน'],
-                                        ]);
-
-
-                                        const saen = new Map([
-                                        ['0',''],['1','หนึ่งแสน'],['2','สองแสน'],['3','สามแสน'],
-                                        ['4','สี่แสน'],['5','ห้าแสน'],['6','หกแสน'],
-                                        ['7','เจ็ดแสน'],['8','แปดแสน'],['9','เก้าแสน'],
-
-                                        ]);
-
-                                        const muen = new Map([
-                                        ['0',''],['1','หนึ่งหมื่น'],['2','สองหมื่น'],['3','สามหมื่น'],
-                                        ['4','สี่หมื่น'],['5','ห้าหมื่น'],['6','หกหมื่น'],
-                                        ['7','เจ็ดหมื่น'],['8','แปดหมื่น'],['9','เก้าหมื่น'],
-                                        ]);
-
-
-                                        const pan = new Map([
-                                        ['0',''],['1','หนึ่งพัน'],['2','สองพัน'],['3','สามพัน'],
-                                        ['4','สี่พัน'],['5','ห้าพัน'],['6','หกพัน'],
-                                        ['7','เจ็ดพัน'],['8','แปดพัน'],['9','เก้าพัน'],
-                                        ]);
-
-                                        const roi = new Map([
-                                        ['0',''],['1','หนึ่งร้อย'],['2','สองร้อย'],['3','สามร้อย'],
-                                        ['4','สี่ร้อย'],['5','ห้าร้อย'],['6','หกร้อย'],
-                                        ['7','เจ็ดร้อย'],['8','แปดร้อย'],['9','เก้าร้อย'],
-                                        ]);
-                                        const sip = new Map([
-                                        ['0',''],['1','สิบ'],['2','ยี่สิบ'],['3','สามสิบ'],
-                                        ['4','สี่สิบ'],['5','ห้าสิบ'],['6','หกสิบ'],
-                                        ['7','เจ็ดสิบ'],['8','แปดสิบ'],['9','เก้าสิบ'],
-                                        ]);
-
-                                        const nuoi = new Map([
-                                        ['0',''],['1','หนึ่ง'],['2','สอง'],['3','สาม'],
-                                        ['4','สี่'],['5','ห้า'],['6','หก'],
-                                        ['7','เจ็ด'],['8','แปด'],['9','เก้า'],
-                                        ]);
-
-                                        const nuoi2 = new Map([
-                                        ['0',''],['1','เอ็ด'],['2','สอง'],['3','สาม'],
-                                        ['4','สี่'],['5','ห้า'],['6','หก'],
-                                        ['7','เจ็ด'],['8','แปด'],['9','เก้า'],
-                                        ]);
-                                        const satang10 = new Map([
-                                        ['',' '],
-                                        ['0',''],['1','สิบ'],['2','ยี่สิบ'],['3','สามสิบ'],
-                                        ['4','สี่สิบ'],['5','ห้าสิบ'],['6','หกสิบ'],
-                                        ['7','เจ็ดสิบ'],['8','แปดสิบ'],['9','เก้าสิบ'],
-                                        ]);
-
-                                        const satang1 = new Map([
-                                        ['',''],
-                                        ['0',''],['1','หนึ่ง'],['2','สอง'],['3','สาม'],
-                                        ['4','สี่'],['5','ห้า'],['6','หก'],
-                                        ['7','เจ็ด'],['8','แปด'],['9','เก้า'],
-                                        ]);
-
-                                        var namePanLan="";
-                                        var nameRoiLan="";
-                                        var nameSipLan="";
-                                        var nameLan="";
-                                        var nameSaen="";
-                                        var nameMuen="";
-                                        var namePan="";
-                                        var nameRoi="";
-                                        var nameSip="";
-                                        var bathUnit="";
-                                        var satangUnit="";
-                                        var nameNuoi="";
-                                        var nameSipSatang="";
-                                        var nameNuoiSatang="";
-
-                                        if(panLan.has(t11[9])==true){namePanLan = panLan.get(t11[9]);}
-                                        else{namePanLan = "";}
-
-                                        if(roiLan.has(t11[8])==true){nameRoiLan = roiLan.get(t11[8]);}
-                                        else{nameRoiLan = "";}
-
-
-                                        if(sipLan.has(t11[7])==true){nameSipLan = sipLan.get(t11[7]);}
-                                        else{nameSipLan = "";}
-
-                                        if(lan.has(t11[6])==true && sipLan.has(t11[7])==false){nameLan = lan.get(t11[6]);}
-                                        else if(lan.has(t11[6])==true){nameLan = lan2.get(t11[6]);}
-                                        else{nameLan = '';}
-
-
-                                        if(saen.has(t11[5])==true){nameSaen = saen.get(t11[5]);}
-                                        else{nameSaen = "";}
-
-                                        if(muen.has(t11[4])==true){nameMuen = muen.get(t11[4]);}
-                                        else{nameMuen = "";}
-
-                                        if(pan.has(t11[3])==true){namePan = pan.get(t11[3]);}
-                                        else{namePan = "";}
-
-
-                                        if(roi.has(t11[2])==true){nameRoi = roi.get(t11[2]);}
-                                        else{nameRoi = "";}
-
-
-                                        if(sip.has(t11[1])==true){nameSip = sip.get(t11[1]);}
-                                        else{nameSip = "";}
-
-
-                                        if(nuoi.has(t11[0])==true && sip.has(t11[1])==false){nameNuoi = nuoi.get(t11[0]);}
-                                        else{nameNuoi = nuoi2.get(t11[0]);}
-
-                                        var leadNumber = namePanLan + nameRoiLan + nameSipLan + nameLan + nameSaen + nameMuen + namePan + nameRoi + nameSip +
-                                        nameNuoi;
-                                        if(sName[0]=='0' && sName[1]=='0'){bathUnit = 'ศูนย์บาท';}
-                                        else if(leadNumber==''){bathUnit = '';}
-                                        else if(sName[1]!=='00'){bathUnit = 'บาท';}
-                                        else{bathUnit = 'บาทถ้วน';}
-
-
-                                        if(satang10.has(t2[0])==true){nameSipSatang = satang10.get(t2[0]);}
-                                        else{nameSipSatang = "";}
-
-                                        if(satang1.has(t2[1])==true){nameNuoiSatang = satang1.get(t2[1]);}
-                                        else{nameNuoiSatang = "";}
-
-                                        if(sName[1]=='00'){satangUnit = '';}
-                                        else if(sName[1]=='0'){satangUnit = '';}
-                                        else if(sName[1]=='001'){satangUnit = '';}
-                                        else if(sName[1]=='002'){satangUnit = '';}
-                                        else if(sName[1]=='003'){satangUnit = '';}
-                                        else if(sName[1]=='004'){satangUnit = '';}
-                                        else if(sName[1]=='005'){satangUnit = 'หนึ่งสตางค์';}
-                                        else if(sName[1]=='006'){satangUnit = 'หนึ่งสตางค์';}
-                                        else if(sName[1]=='007'){satangUnit = 'หนึ่งสตางค์';}
-                                        else if(sName[1]=='008'){satangUnit = 'หนึ่งสตางค์';}
-                                        else if(sName[1]=='009'){satangUnit = 'หนึ่งสตางค์';}
-                                        else if(sName[1]==''){satangUnit = '';}
-                                        else{satangUnit = 'สตางค์';}
-
-
-                                        document.getElementById("totalText").innerHTML = "(" + namePanLan + nameRoiLan + nameSipLan + nameLan + nameSaen + nameMuen + namePan + nameRoi + nameSip +
-                                        nameNuoi + bathUnit + nameSipSatang + nameNuoiSatang + satangUnit + ")";
-
-                                        document.getElementById("equity").innerHTML = equity;
-}
-
-</script>
-
-                                           				**********************************
-			</div>
-			<p class="center">
-ขอบพระคุณครับ</p>	
-	
-			<div class="break">
-				**********************************
-			</div>
-						
-                                        </div>
-					</div>
-                     
-					</div>
 <script src="https://kietpawpan.github.io/encryption/crypto-js.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-R4HD5QjLH2_wiLpl2A8gqkrjYz25idpvRdx4X7a76vtMVV18nFwbeKckhAtAqvA88Q/exec";
 
-					 
-                                </body>
-                            </html>
+async function dec() {
+    const key = document.getElementById('key2').value;
+    if (!key || key.length < 4) return; 
+
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ password: key })
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+            processAndDisplay(result.data);
+        }
+    } catch (error) {
+        console.error("Connection Error:", error);
+    }
+}
+
+function processAndDisplay(data) {
+    const incomeContainer = document.getElementById('incomeList');
+    const expenseContainer = document.getElementById('expenseList');
+    
+    incomeContainer.innerHTML = ""; 
+    expenseContainer.innerHTML = ""; 
+    
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    data.forEach(function(row) {
+        // รายจ่าย (Column A และ B)
+        if (row[0] && row[1]) {
+            const expName = row[0];
+            const expAmount = parseFloat(row[1]) || 0;
+            totalExpense += expAmount;
+            
+            const div = document.createElement('div');
+            div.className = "transactionDetails";
+            div.innerHTML = `<div class="detail" style="font-size: 0.85em; font-weight: normal;">${expName}</div><div class="detail" style="font-size: 0.85em; font-weight: normal;">${expAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}</div>`;
+            expenseContainer.appendChild(div);
+        }
+
+        // รายรับ (Column D และ E ซึ่งตรงกับ index 3 และ 4)
+        if (row[3] && row[4]) {
+            const incName = row[3];
+            const incAmount = parseFloat(row[4]) || 0;
+            totalIncome += incAmount;
+            
+            const div = document.createElement('div');
+            div.className = "transactionDetails";
+            div.innerHTML = `<div class="detail" style="font-size: 0.85em; font-weight: normal;">${incName}</div><div class="detail" style="font-size: 0.85em; font-weight: normal;">${incAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}</div>`;
+            incomeContainer.appendChild(div);
+        }
+    });
+
+    const netEquity = totalIncome - totalExpense;
+    
+    document.getElementById("total").innerHTML = totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
+    document.getElementById("equity").innerHTML = netEquity.toLocaleString('en-US', {minimumFractionDigits: 2});
+
+    renderThaiText(totalExpense);
+}
+
+function renderThaiText(sum) {
+    var n0 = sum.toFixed(2).toString(); 
+    var n1 = n0.replace(/,/g,"");
+    var sName = n1.split(".");
+    var t1 = Array.from(sName[0]);
+    var t11 = t1.reverse();
+    var t2 = Array.from(sName[1]);
+
+    const panLan = new Map([['',''],['0',''],['1','หนึ่งพัน'],['2','สองพัน'],['3','สามพัน'],['4','สี่พัน'],['5','ห้าพัน'],['6','หกพัน'],['7','เจ็ดพัน'],['8','แปดพัน'],['9','เก้าพัน']]);
+    const roiLan = new Map([['',''],['0',''],['1','หนึ่งร้อย'],['2','สองร้อย'],['3','สามร้อย'],['4','สี่ร้อย'],['5','ห้าร้อย'],['6','หกร้อย'],['7','เจ็ดร้อย'],['8','แปดร้อย'],['9','เก้าร้อย']]);
+    const sipLan = new Map([['0',''],['1','สิบ'],['2','ยี่สิบ'],['3','สามสิบ'],['4','สี่สิบ'],['5','ห้าสิบ'],['6','หกสิบ'],['7','เจ็ดสิบ'],['8','แปดสิบ'],['9','เก้าสิบ']]);
+    const lan = new Map([['0','ล้าน'],['1','หนึ่งล้าน'],['2','สองล้าน'],['3','สามล้าน'],['4','สี่ล้าน'],['5','ห้าล้าน'],['6','หกล้าน'],['7','เจ็ดล้าน'],['8','แปดล้าน'],['9','เก้าล้าน']]);
+    const lan2 = new Map([['1','เอ็ดล้าน'],['2','สองล้าน'],['3','สามล้าน'],['4','สี่ล้าน'],['5','ห้าล้าน'],['6','หกล้าน'],['7','เจ็ดล้าน'],['8','แปดล้าน'],['9','เก้าล้าน'],['0','ล้าน']]);
+    const saen = new Map([['0',''],['1','หนึ่งแสน'],['2','สองแสน'],['3','สามแสน'],['4','สี่แสน'],['5','ห้าแสน'],['6','หกแสน'],['7','เจ็ดแสน'],['8','แปดแสน'],['9','เก้าแสน']]);
+    const muen = new Map([['0',''],['1','หนึ่งหมื่น'],['2','สองหมื่น'],['3','สามหมื่น'],['4','สี่หมื่น'],['5','ห้าหมื่น'],['6','หกหมื่น'],['7','เจ็ดหมื่น'],['8','แปดหมื่น'],['9','เก้าหมื่น']]);
+    const pan = new Map([['0',''],['1','หนึ่งพัน'],['2','สองพัน'],['3','สามพัน'],['4','สี่พัน'],['5','ห้าพัน'],['6','หกพัน'],['7','เจ็ดพัน'],['8','แปดพัน'],['9','เก้าพัน']]);
+    const roi = new Map([['0',''],['1','หนึ่งร้อย'],['2','สองร้อย'],['3','สามร้อย'],['4','สี่ร้อย'],['5','ห้าร้อย'],['6','หกร้อย'],['7','เจ็ดร้อย'],['8','แปดร้อย'],['9','เก้าร้อย']]);
+    const sip = new Map([['0',''],['1','สิบ'],['2','ยี่สิบ'],['3','สามสิบ'],['4','สี่สิบ'],['5','ห้าสิบ'],['6','หกสิบ'],['7','เจ็ดสิบ'],['8','แปดสิบ'],['9','เก้าสิบ']]);
+    const nuoi = new Map([['0',''],['1','หนึ่ง'],['2','สอง'],['3','สาม'],['4','สี่'],['5','ห้า'],['6','หก'],['7','เจ็ด'],['8','แปด'],['9','เก้า']]);
+    const nuoi2 = new Map([['0',''],['1','เอ็ด'],['2','สอง'],['3','สาม'],['4','สี่'],['5','ห้า'],['6','หก'],['7','เจ็ด'],['8','แปด'],['9','เก้า']]);
+    const satang10 = new Map([['',' '],['0',''],['1','สิบ'],['2','ยี่สิบ'],['3','สามสิบ'],['4','สี่สิบ'],['5','ห้าสิบ'],['6','หกสิบ'],['7','เจ็ดสิบ'],['8','แปดสิบ'],['9','เก้าสิบ']]);
+    const satang1 = new Map([['',''],['0',''],['1','หนึ่ง'],['2','สอง'],['3','สาม'],['4','สี่'],['5','ห้า'],['6','หก'],['7','เจ็ด'],['8','แปด'],['9','เก้า']]);
+
+    var namePanLan = panLan.get(t11[9]) || "";
+    var nameRoiLan = roiLan.get(t11[8]) || "";
+    var nameSipLan = sipLan.get(t11[7]) || "";
+    var nameLan = (t11[7]) ? lan2.get(t11[6]) : (lan.get(t11[6]) || "");
+    var nameSaen = saen.get(t11[5]) || "";
+    var nameMuen = muen.get(t11[4]) || "";
+    var namePan = pan.get(t11[3]) || "";
+    var nameRoi = roi.get(t11[2]) || "";
+    var nameSip = sip.get(t11[1]) || "";
+    var nameNuoi = (t11[1] && t11[1] != '0') ? (nuoi2.get(t11[0]) || "") : (nuoi.get(t11[0]) || "");
+
+    var leadNumber = namePanLan + nameRoiLan + nameSipLan + nameLan + nameSaen + nameMuen + namePan + nameRoi + nameSip + nameNuoi;
+    var bathUnit = (sum == 0) ? "ศูนย์บาท" : (sName[1] == "00" ? "บาทถ้วน" : "บาท");
+    
+    var nameSipSatang = satang10.get(t2[0]) || "";
+    var nameNuoiSatang = satang1.get(t2[1]) || "";
+    var satangUnit = (sName[1] == "00") ? "" : "สตางค์";
+
+    document.getElementById("totalText").innerHTML = "(" + leadNumber + bathUnit + nameSipSatang + nameNuoiSatang + satangUnit + ")";
+}
+</script>
+</body>
+</html>
