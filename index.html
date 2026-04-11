@@ -8,15 +8,21 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
     <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet'>
+    <style>
+        @media print {
+            #keyInputArea { display: none; }
+        }
+        #showScroll { cursor: pointer; }
+    </style>
 </head>
 <body>
     <div id="showScroll" class="container">
         <div class="receipt">
             <div class="logo">
-                <div class='companyName'>MONTE</div>
-                <div class='slogan'>e-Services</div>
+                <div class='companyName'>FAMILY</div>
+                <div class='slogan' id='currentDate'></div>
             </div>
-                                            
+                                                
             <div class="address">
                 ใบเสร็จอิเล็กทรอนิกส์<br>
             </div>
@@ -30,8 +36,10 @@
 
             <div class="feedback">
                 <div class="break">
-                    <input type="text" id="key2" width="100%" placeholder="secret key" oninput="dec()">
-                    <br><br>
+                    <div id="keyInputArea">
+                        <input type="text" id="key2" width="100%" placeholder="secret key" oninput="dec()">
+                        <br><br>
+                    </div>
                     
                     <div class="survey"><b>รายรับ:</b></div>
                     <div id="incomeList"></div>
@@ -53,7 +61,7 @@
                     </div>
 
                     <div class="tripSummary">
-                        <div>คงเหลือสุทธิ: <br></div>           
+                        <div>คงเหลือสุทธิ: <br></div>            
                         <div class="transactionDetails">
                             <div class="detail"></div>
                             <div class="detail" id='equity' style="font-size: 1.2em;">0.00</div>
@@ -66,10 +74,21 @@
         </div>
     </div>
 
-<script src="https://kietpawpan.github.io/encryption/crypto-js.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
+// ระบบแสดงวันที่ปัจจุบันอัตโนมัติ
+function setCurrentDate() {
+    const now = new Date();
+    const day = now.getDate();
+    const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    const month = months[now.getMonth()];
+    const year = now.getFullYear() + 543;
+    
+    document.getElementById('currentDate').innerText = `${day} ${month} ${year}`;
+}
+setCurrentDate();
+
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-R4HD5QjLH2_wiLpl2A8gqkrjYz25idpvRdx4X7a76vtMVV18nFwbeKckhAtAqvA88Q/exec";
 
 async function dec() {
@@ -84,6 +103,7 @@ async function dec() {
         const result = await response.json();
 
         if (result.status === "success") {
+            document.getElementById('keyInputArea').style.display = 'none';
             processAndDisplay(result.data);
         }
     } catch (error) {
@@ -102,7 +122,6 @@ function processAndDisplay(data) {
     let totalExpense = 0;
 
     data.forEach(function(row) {
-        // รายจ่าย (Column A และ B)
         if (row[0] && row[1]) {
             const expName = row[0];
             const expAmount = parseFloat(row[1]) || 0;
@@ -114,7 +133,6 @@ function processAndDisplay(data) {
             expenseContainer.appendChild(div);
         }
 
-        // รายรับ (Column D และ E ซึ่งตรงกับ index 3 และ 4)
         if (row[3] && row[4]) {
             const incName = row[3];
             const incAmount = parseFloat(row[4]) || 0;
@@ -178,6 +196,38 @@ function renderThaiText(sum) {
 
     document.getElementById("totalText").innerHTML = "(" + leadNumber + bathUnit + nameSipSatang + nameNuoiSatang + satangUnit + ")";
 }
+
+function captureReceipt() {
+    const receiptElement = document.querySelector(".receipt");
+    
+    html2canvas(receiptElement, {
+        scale: 1.5, 
+        backgroundColor: "#ffffff",
+        useCORS: true
+    }).then(canvas => {
+        let link = document.createElement('a');
+        let dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
+        link.download = 'MONTE_Receipt_' + dateStr + '.jpg';
+        link.href = canvas.toDataURL('image/jpeg', 0.8);
+        link.click();
+    });
+}
+
+let lastTap = 0;
+document.getElementById('showScroll').addEventListener('touchend', function(e) {
+    let currentTime = new Date().getTime();
+    let tapLength = currentTime - lastTap;
+    if (tapLength < 500 && tapLength > 0) {
+        captureReceipt();
+        e.preventDefault();
+    }
+    lastTap = currentTime;
+});
+
+document.getElementById('showScroll').addEventListener('dblclick', function() {
+    captureReceipt();
+});
+
 </script>
 </body>
 </html>
