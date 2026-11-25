@@ -11,9 +11,37 @@
       <link rel="manifest" href="manifest.json">
     <style>
         @media print {
-            #keyInputArea { display: none; }
+            #keyInputArea, #previewOverlay { display: none !important; }
         }
         #showScroll { cursor: pointer; }
+
+        /* หน้าต่างแสดงรูปใบเสร็จก่อนบันทึก */
+        #previewOverlay {
+            position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000; padding: 16px; box-sizing: border-box;
+        }
+        #previewOverlay.show { display: flex; }
+        .previewBox {
+            background: #fff; border-radius: 12px; padding: 16px;
+            width: 100%; max-width: 360px; max-height: 100%; box-sizing: border-box;
+            display: flex; flex-direction: column; gap: 10px;
+            text-align: center; font-family: sans-serif; color: #1f1f1f;
+        }
+        #previewImg {
+            display: none; max-width: 100%; max-height: 55vh; margin: 0 auto;
+            object-fit: contain; border: 1px solid #ddd;
+            -webkit-touch-callout: default; -webkit-user-select: auto; user-select: auto;
+        }
+        .previewHint { font-size: 13px; color: #555; }
+        .previewButtons { display: flex; gap: 8px; }
+        .previewButtons button {
+            flex: 1; padding: 12px; font-size: 16px; border: 0; border-radius: 8px; cursor: pointer;
+        }
+        #saveBtn { background: #6b21a8; color: #fff; }
+        #saveBtn:disabled { opacity: 0.5; cursor: default; }
+        #closeBtn { background: #e5e7eb; color: #111; }
     </style>
 </head>
 <body>
@@ -69,8 +97,20 @@
                         </div>
                     </div>
                 </div>
-                <p class="center">ขอบพระคุณครับ</p>   
+                <p class="center">ขอบพระคุณครับ</p>
                 <div class="break">**********************************</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="previewOverlay">
+        <div class="previewBox">
+            <div id="previewStatus">กำลังสร้างรูปใบเสร็จ...</div>
+            <img id="previewImg" alt="รูปใบเสร็จ">
+            <div class="previewHint">ถ้ากดปุ่มแล้วไม่มีอะไรเกิดขึ้น ให้กดค้างที่รูป แล้วเลือก "บันทึกรูปภาพ"</div>
+            <div class="previewButtons">
+                <button type="button" id="saveBtn" disabled>บันทึกรูป</button>
+                <button type="button" id="closeBtn">ปิด</button>
             </div>
         </div>
     </div>
@@ -198,34 +238,131 @@ function renderThaiText(sum) {
     document.getElementById("totalText").innerHTML = "(" + leadNumber + bathUnit + nameSipSatang + nameNuoiSatang + satangUnit + ")";
 }
 
+// ---------- บันทึกรูปใบเสร็จ ----------
+// <a download> ใช้ไม่ได้บน iPhone ที่เปิดจากไอคอนหน้าโฮม (โหมด standalone)
+// และในเบราว์เซอร์ภายในแอป เช่น LINE / Facebook จึงแสดงรูปให้ดูก่อน
+// แล้วให้กดปุ่ม "บันทึกรูป" (แชร์ไฟล์ หรือดาวน์โหลด) หรือกดค้างที่รูปเพื่อบันทึก
+const previewOverlay = document.getElementById('previewOverlay');
+const previewImg = document.getElementById('previewImg');
+const previewStatus = document.getElementById('previewStatus');
+const saveBtn = document.getElementById('saveBtn');
+
+let receiptBlob = null;
+let receiptFileName = '';
+let capturing = false;
+
+function dataUrlToBlob(dataUrl) {
+    const parts = dataUrl.split(',');
+    const mime = parts[0].match(/:(.*?);/)[1];
+    const bin = atob(parts[1]);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new Blob([bytes], { type: mime });
+}
+
 function captureReceipt() {
-    const receiptElement = document.querySelector(".receipt");
-    
-    html2canvas(receiptElement, {
-        scale: 1.5, 
+    if (capturing || previewOverlay.classList.contains('show')) return;
+    capturing = true;
+
+    receiptBlob = null;
+    previewImg.removeAttribute('src');
+    previewImg.style.display = 'none';
+    saveBtn.disabled = true;
+    previewStatus.textContent = 'กำลังสร้างรูปใบเสร็จ...';
+    previewOverlay.classList.add('show');
+
+    html2canvas(document.querySelector(".receipt"), {
+        scale: 1.5,
         backgroundColor: "#ffffff",
         useCORS: true
     }).then(canvas => {
-        let link = document.createElement('a');
-        let dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
-        link.download = 'MONTE_Receipt_' + dateStr + '.jpg';
-        link.href = canvas.toDataURL('image/jpeg', 0.8);
-        link.click();
+        const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        receiptFileName = 'MONTE_Receipt_' + dateStr + '.jpg';
+        receiptBlob = dataUrlToBlob(dataUrl);
+        previewImg.src = dataUrl;
+        previewImg.style.display = 'block';
+        previewStatus.textContent = 'รูปใบเสร็จพร้อมแล้ว';
+        saveBtn.disabled = false;
+    }).catch(err => {
+        console.error('Capture Error:', err);
+        previewStatus.textContent = 'สร้างรูปไม่สำเร็จ: ' + (err && err.message ? err.message : err);
+    }).finally(() => {
+        capturing = false;
     });
 }
 
-let lastTap = 0;
-document.getElementById('showScroll').addEventListener('touchend', function(e) {
-    let currentTime = new Date().getTime();
-    let tapLength = currentTime - lastTap;
-    if (tapLength < 500 && tapLength > 0) {
-        captureReceipt();
-        e.preventDefault();
+function downloadBlob(blob, fileName) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+async function saveReceipt() {
+    if (!receiptBlob) return;
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+    // มือถือ: เปิดเมนูแชร์ (iPhone เลือก "บันทึกรูปภาพ" ได้ แม้เปิดจากไอคอนหน้าโฮม)
+    if (isTouch && navigator.canShare && window.File) {
+        const file = new File([receiptBlob], receiptFileName, { type: 'image/jpeg' });
+        if (navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({ files: [file] });
+                return;
+            } catch (err) {
+                if (err.name === 'AbortError') return; // ผู้ใช้กดยกเลิกเอง
+                console.warn('Share Error:', err);
+            }
+        }
     }
-    lastTap = currentTime;
+    downloadBlob(receiptBlob, receiptFileName);
+}
+
+function closePreview() {
+    previewOverlay.classList.remove('show');
+}
+
+saveBtn.addEventListener('click', saveReceipt);
+document.getElementById('closeBtn').addEventListener('click', closePreview);
+previewOverlay.addEventListener('click', function(e) {
+    if (e.target === previewOverlay) closePreview();
 });
 
-document.getElementById('showScroll').addEventListener('dblclick', function() {
+// แตะสองครั้ง (มือถือ) / ดับเบิลคลิก (คอมพิวเตอร์) ที่ใบเสร็จ เพื่อสร้างรูป
+const receiptArea = document.getElementById('showScroll');
+let lastTap = 0, touchStartX = 0, touchStartY = 0;
+
+receiptArea.addEventListener('touchstart', function(e) {
+    const t = e.changedTouches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+}, { passive: true });
+
+receiptArea.addEventListener('touchend', function(e) {
+    if (e.target.closest('input')) return;
+    const t = e.changedTouches[0];
+    // ถ้านิ้วเลื่อน (เป็นการเลื่อนหน้าจอ) ไม่นับเป็นการแตะ
+    if (Math.abs(t.clientX - touchStartX) > 10 || Math.abs(t.clientY - touchStartY) > 10) {
+        lastTap = 0;
+        return;
+    }
+    const now = Date.now();
+    if (now - lastTap < 500) {
+        e.preventDefault();
+        lastTap = 0;
+        captureReceipt();
+        return;
+    }
+    lastTap = now;
+});
+
+receiptArea.addEventListener('dblclick', function(e) {
+    if (e.target.closest('input')) return;
     captureReceipt();
 });
 
